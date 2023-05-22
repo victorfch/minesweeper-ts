@@ -1,0 +1,29 @@
+.board {
+  display: grid;
+  max-width: fit-content;
+  border: 1px solid black;
+  margin-top: 20px;
+}
+
+.board__cell {
+  height: 50px;
+  width: 50px;
+  background: grey;
+  border: 1px solid black;
+  cursor: pointer;
+  position: relative;
+}
+
+.board__cell.board__cell--open {
+  background: whitesmoke;
+}
+
+.board__cell.board__cell--open.board__cell--bomb::after {
+  content: "";
+  background: black;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
