@@ -18,7 +18,6 @@ export class Board implements IBoard {
     this.cells.sort(() => 0.5 - Math.random())
   }
 
-
   generateRowsAndCols = () => {
     for (let index = 0; index < this.cells.length; index++) {
       const cell = { ...this.cells[index] }
@@ -90,12 +89,16 @@ export class Board implements IBoard {
         this.addFlag(btn)
       })
 
-      btn.addEventListener("click", () => {
-        if (!btn.classList.contains("board__cell--flag")) {
-          this.revealCell(btn)
-        }
-      })
+
+      btn.addEventListener("click", this.handleClick)
     })
+  }
+
+  handleClick = (event: MouseEvent) => {
+    const btn = event.target as HTMLButtonElement
+    if (!btn.classList.contains("board__cell--flag")) {
+      this.revealCell(btn);
+    }
   }
 
   revealCell = (button: HTMLButtonElement) => {
@@ -132,6 +135,7 @@ export class Board implements IBoard {
         cell.htmlElement.classList.add("board__cell--open")
         cell.htmlElement.classList.add("board__cell--bomb")
       }
+      cell.htmlElement.removeEventListener("click", this.handleClick)
     })
   }
 
