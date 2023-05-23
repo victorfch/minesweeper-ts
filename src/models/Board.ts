@@ -76,17 +76,24 @@ export class Board implements IBoard {
       cell.htmlElement = btn
       buttons.push(btn)
     })
-    boardDiv.append(...buttons)
 
+    boardDiv.append(...buttons)
     app.appendChild(boardDiv)
   }
 
-  addListenerToCells = (app: HTMLDivElement) => {
-    const cells = [...app.querySelectorAll(".board__cell")] as HTMLButtonElement[]
-  
-    cells.forEach((cell: HTMLButtonElement) => {
-      cell.addEventListener("click", () => {
-        this.revealCell(cell)
+  addListenerToButtons = (app: HTMLDivElement) => {
+    const buttons = [...app.querySelectorAll(".board__cell")] as HTMLButtonElement[]
+    
+    buttons.forEach((btn: HTMLButtonElement) => {
+      btn.addEventListener("contextmenu", (e) => {
+        e.preventDefault()
+        this.addFlag(btn)
+      })
+
+      btn.addEventListener("click", () => {
+        if (!btn.classList.contains("board__cell--flag")) {
+          this.revealCell(btn)
+        }
       })
     })
   }
@@ -94,6 +101,8 @@ export class Board implements IBoard {
   revealCell = (button: HTMLButtonElement) => {
     const id = Number(button.dataset.cell)
     const cell = this.cells[id]
+    console.log(cell)
+    //cell.markAsOpen()
     cell.isOpen = true
     button.classList.add("board__cell--open")
   
@@ -126,4 +135,7 @@ export class Board implements IBoard {
     })
   }
 
+  addFlag = (btn: HTMLButtonElement) => {
+    btn.classList.toggle("board__cell--flag")
+  }
 }

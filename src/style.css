@@ -24,3 +24,9 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+
+.board__cell.board__cell--flag {
+  background-image: url(./flag.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
