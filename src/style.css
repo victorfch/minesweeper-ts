@@ -18,12 +18,9 @@
   background: whitesmoke;
 }
 
-.board__cell.board__cell--open.board__cell--bomb::after {
-  content: "";
-  background: black;
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
+.board__cell.board__cell--open.board__cell--bomb {
+  background-color: red;
+  background-image: url(./bomb-filled.svg);
+  background-repeat: no-repeat;
+  background-position: center;
 }

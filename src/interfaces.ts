@@ -1,4 +1,4 @@
-export interface Cell {
+export interface ICell {
   hasBomb: boolean,
   isOpen: boolean,
   row: number,
@@ -7,7 +7,14 @@ export interface Cell {
   number?: number
 }
 
-export interface BoardData {
+export interface IBoardData {
+  rows: number,
+  cols: number,
+  bombs: number
+}
+
+export interface IBoard {
+  cells: ICell[],
   rows: number,
   cols: number,
   bombs: number
