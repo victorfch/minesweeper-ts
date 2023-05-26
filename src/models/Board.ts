@@ -2,7 +2,7 @@ import { IBoard, IBoardData, ICell } from "../interfaces"
 import { Cell } from "./Cell"
 
 export class Board implements IBoard {
-  cells: ICell[]
+  cells!: ICell[]
   bombs: number
   rows: number
   cols: number
@@ -12,6 +12,10 @@ export class Board implements IBoard {
     this.rows = boardData.rows
     this.cols = boardData.cols
 
+    this.generateCells()
+  }
+
+  generateCells = () => {
     const cellsWithBomb: ICell[] = Array(this.bombs).fill(new Cell(true))
     const cellsNoBomb = Array(this.rows * this.cols - this.bombs).fill(new Cell(false))
     this.cells = cellsNoBomb.concat(cellsWithBomb)
@@ -76,36 +80,60 @@ export class Board implements IBoard {
       buttons.push(btn)
     })
 
+
+    //generate btn reset
+    
     boardDiv.append(...buttons)
     app.appendChild(boardDiv)
+
+    const btnReset = document.createElement("button")
+    btnReset.classList.add("btn-reset")
+    btnReset.textContent = "Reset"
+
+    app.appendChild(btnReset)
+  }
+
+  reset = () => {
+    this.generateCells()
+    this.generateRowsAndCols()
+    this.countBombs()
+    let app = document.querySelector("#app") as HTMLDivElement
+    document.querySelector(".btn-reset")?.remove()
+    document.querySelector(".board")?.remove()
+    this.renderHtml(app)
+    this.addListenerToButtons(app)
   }
 
   addListenerToButtons = (app: HTMLDivElement) => {
     const buttons = [...app.querySelectorAll(".board__cell")] as HTMLButtonElement[]
-    
+    const btnReset = app.querySelector(".btn-reset")
+    btnReset?.addEventListener("click", this.reset)
+  
     buttons.forEach((btn: HTMLButtonElement) => {
-      btn.addEventListener("contextmenu", (e) => {
-        e.preventDefault()
-        this.addFlag(btn)
-      })
-
-
+      btn.addEventListener("contextmenu", this.handleContextMenu)
       btn.addEventListener("click", this.handleClick)
     })
   }
 
   handleClick = (event: MouseEvent) => {
     const btn = event.target as HTMLButtonElement
+
     if (!btn.classList.contains("board__cell--flag")) {
       this.revealCell(btn);
     }
+  }
+
+  handleContextMenu = (event: MouseEvent) => {
+    const btn = event.target as HTMLButtonElement
+
+    event.preventDefault()
+    this.addFlag(btn)
   }
 
   revealCell = (button: HTMLButtonElement) => {
     const id = Number(button.dataset.cell)
     const cell = this.cells[id]
     console.log(cell)
-    //cell.markAsOpen()
     cell.isOpen = true
     button.classList.add("board__cell--open")
   
@@ -136,6 +164,7 @@ export class Board implements IBoard {
         cell.htmlElement.classList.add("board__cell--bomb")
       }
       cell.htmlElement.removeEventListener("click", this.handleClick)
+      cell.htmlElement.removeEventListener("contextmenu", this.handleContextMenu)
     })
   }
 

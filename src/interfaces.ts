@@ -25,5 +25,6 @@ export interface IBoard {
   countBombs: () => void,
   renderHtml: (app: HTMLDivElement) => void,
   addListenerToButtons: (app: HTMLDivElement) => void,
-  addFlag: (element: HTMLButtonElement) => void
+  addFlag: (element: HTMLButtonElement) => void,
+  reset: () => void
 }
